@@ -127,7 +127,7 @@ class RestClient(object):
         """"""
         self.url_base: str = ""
         self.proxy: str = None
-
+        self.verify_ssl: bool = True  # 金泽宽修改于2024-07-17
         self.session: ClientSession = None
         self.loop: AbstractEventLoop = None
 
@@ -136,10 +136,11 @@ class RestClient(object):
         url_base: str,
         proxy_host: str = "",
         proxy_port: int = 0
+        verify_ssl: bool = True,    # 金泽宽修改于2024-07-18
     ) -> None:
         """传入REST API的根地址，初始化客户端"""
         self.url_base = url_base
-
+        self.verify_ssl = verify_ssl    # 金泽宽修改于2024-07-18
         if proxy_host and proxy_port:
             self.proxy = f"http://{proxy_host}:{proxy_port}"
 
@@ -263,7 +264,8 @@ class RestClient(object):
             params=request.params,
             data=request.data,
             json=request.json,
-            proxy=self.proxy
+            proxy=self.proxy,
+            verify_ssl=self.verify_ssl     # 金泽宽修改于2024-07-17
         )
 
         text: str = await cr.text()
